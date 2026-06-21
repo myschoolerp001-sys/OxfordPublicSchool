@@ -14,10 +14,12 @@ const generateToken = (id) => {
 exports.registerAdmin = async (req, res) => {
     try {
         const { name, email, password } = req.body;
-        const adminExists = await Admin.findOne({ email });
-        if (adminExists) {
-            return res.status(400).json({ message: 'Admin with this email already exists!' });
+
+        const existingAdmin = await Admin.findOne();
+        if (existingAdmin) {
+            return res.status(400).json({ message: 'Only one admin account is allowed.' });
         }
+
         const admin = await Admin.create({
             name,
             email,

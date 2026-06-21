@@ -12,9 +12,19 @@ app.use(express.json());
 
 const authRoutes = require('./src/routes/authRoutes');
 const schoolProfileRoutes = require('./src/routes/schoolProfileRoutes');
+const disclosureRoutes = require('./src/routes/disclosureRoutes');
+const galleryRoutes = require('./src/routes/galleryRoutes');
+const newsRoutes = require('./src/routes/newsRoutes');
+const teacherRoutes = require('./src/routes/teacherRoutes');
+const topperRoutes = require('./src/routes/topperRoutes');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/school-profile', schoolProfileRoutes);
+app.use('/api/disclosures', disclosureRoutes);
+app.use('/api/gallery', galleryRoutes);
+app.use('/api/news', newsRoutes);
+app.use('/api/teachers', teacherRoutes);
+app.use('/api/toppers', topperRoutes);
 
 app.get('/', (req, res) => {
     res.json({ success: true, message: "Oxford Public School API is Live! 🏫" });

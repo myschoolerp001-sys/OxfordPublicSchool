@@ -1,4 +1,11 @@
 const SchoolProfile = require('../models/SchoolProfile');
+const { uploadBuffer } = require('../config/cloudinary');
+
+const uploadLogo = async (req) => {
+    if (!req.file) return null;
+    const result = await uploadBuffer(req.file.buffer, 'oxford-school/logo');
+    return result.secure_url;
+};
 
 // ==========================================
 // 1. GET API (Public) - Website ke liye
@@ -23,11 +30,13 @@ exports.getSchoolProfile = async (req, res) => {
 // ==========================================
 exports.updateSchoolProfile = async (req, res) => {
     try {
-        // findOneAndUpdate mein 'upsert: true' ka matlab hai ki 
-        // agar data nahi mila toh naya bana do, mila toh update kar do.
+        const logoUrl = await uploadLogo(req);
         const updatedProfile = await SchoolProfile.findOneAndUpdate(
             {}, // Empty filter kyunki hume pehla hi record update karna hai
-            req.body, // Naya data jo Postman/Frontend se aayega
+            {
+                ...req.body,
+                ...(logoUrl ? { logoUrl } : {})
+            },
             { new: true, upsert: true, setDefaultsOnInsert: true }
         );
 
