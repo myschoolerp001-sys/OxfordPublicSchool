@@ -9,8 +9,30 @@ const uploadTeacherPhoto = async (req) => {
 
 exports.getAllTeachers = async (req, res) => {
     try {
-        const items = await Teacher.find().sort({ createdAt: -1 });
-        res.status(200).json(items);
+        // 1. Pagination parameters set karein (default: page 1, limit 10)
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        // 2. Total documents count karein (pagination metadata ke liye)
+        const totalItems = await Teacher.countDocuments();
+
+        // 3. Database se paginated data fetch karein
+        const items = await Teacher.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        // 4. Response format bhejein jo frontend expect kar raha hai
+        res.status(200).json({
+            data: items,
+            pagination: {
+                totalItems,
+                currentPage: page,
+                totalPages: Math.ceil(totalItems / limit),
+                itemsPerPage: limit
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
