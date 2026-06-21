@@ -9,8 +9,24 @@ const uploadGalleryImage = async (req) => {
 
 exports.getAllGallery = async (req, res) => {
     try {
-        const items = await Gallery.find().sort({ createdAt: -1 });
-        res.status(200).json(items);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+        const totalItems = await Gallery.countDocuments();
+        const items = await Gallery.find()
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        res.status(200).json({
+            data: items,
+            pagination: {
+                totalItems,
+                currentPage: page,
+                totalPages: Math.ceil(totalItems / limit),
+                itemsPerPage: limit
+            }
+        });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
