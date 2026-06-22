@@ -1,6 +1,7 @@
 const express = require('express');
 const {
-    getAllNews,
+    getPublicNews,
+    getAdminNews,
     getNewsById,
     createNews,
     updateNews,
@@ -10,7 +11,12 @@ const { protect } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-router.get('/', getAllNews);
+// Public route - Bina token ke chalega
+router.get('/public', getPublicNews);
+
+// Admin route - Token chahiye aur pagination query params lega
+router.get('/admin', protect, getAdminNews); 
+
 router.get('/:id', getNewsById);
 router.post('/', protect, createNews);
 router.put('/:id', protect, updateNews);
