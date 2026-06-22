@@ -7,7 +7,7 @@ const teacherSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: '' // Agar photo nahi hai toh default blank rahega
+        default: '' 
     },
     subject: {
         type: String,

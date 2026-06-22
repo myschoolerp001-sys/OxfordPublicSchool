@@ -15,7 +15,7 @@ const newsSchema = new mongoose.Schema({
     },
     isActive: {
         type: Boolean,
-        default: true // False karne par website par dikhna band ho jayega
+        default: true 
     }
 }, { timestamps: true });
 
