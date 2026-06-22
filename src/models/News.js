@@ -9,9 +9,13 @@ const newsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    date: {
+    startDate: {
         type: Date,
-        default: Date.now // Default aaj ki date le lega
+        default: Date.now // Default aaj aur abhi ka time le lega
+    },
+    endDate: {
+        type: Date,
+        required: false // Expiry date (optional)
     },
     isActive: {
         type: Boolean,

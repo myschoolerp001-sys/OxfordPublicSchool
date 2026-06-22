@@ -7,9 +7,9 @@ exports.getPublicNews = async (req, res) => {
 
         const filter = {
             isActive: true,
-            startDate: { $lte: currentDate },
+            startDate: { $lte: currentDate }, // Start date past ya present mein honi chahiye
             $or: [
-                { endDate: { $gte: currentDate } },
+                { endDate: { $gte: currentDate } }, // End date future mein honi chahiye
                 { endDate: null },
                 { endDate: { $exists: false } }
             ]
